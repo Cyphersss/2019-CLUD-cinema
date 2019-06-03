@@ -346,6 +346,29 @@ UNLOCK TABLES;
 -- Dumping events for database 'cinema'
 --
 
+DROP TABLE IF EXISTS `charge_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `charge_records` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` int(11) DEFAULT NULL,
+                        `charge_amount` float DEFAULT NULL,
+                        `actual_amount` float DEFAULT NULL,
+                        `charge_time` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `charge_record`
+--
+
+LOCK TABLES `charge_records` WRITE;
+/*!40000 ALTER TABLE `charge_records` DISABLE KEYS */;
+INSERT INTO `charge_records` VALUES (1,15,200,230,'2019-04-21 13:54:38'),(2,15,400,460,'2019-04-17 18:47:42');
+/*!40000 ALTER TABLE `charge_records` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Dumping routines for database 'cinema'
 --

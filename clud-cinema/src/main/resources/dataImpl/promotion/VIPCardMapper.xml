@@ -7,6 +7,16 @@
         values(#{userId}, #{balance})
     </insert>
 
+    <insert id="insertChargeRecord" parameterType="com.example.cinema.po.ChargeRecord"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into charge_records(user_id, charge_amount, actual_amount, charge_time)
+        values(#{userId},#{chargeAmount},#{actualAmount},#{chargeTime})
+    </insert>
+
+    <select id="selectRecordsByUserId" resultMap="ChargeRecord">
+        select * from charge_records where user_id=#{userId}
+    </select>
+
     <select id="selectCardById" resultMap="VIPCard">
         select * from vip_card where id=#{id}
     </select>
@@ -20,6 +30,14 @@
         <result column="id" property="id"></result>
         <result column="user_id" property="userId"></result>
         <result column="balance" property="balance"></result>
+    </resultMap>
+
+    <resultMap id="ChargeRecord" type="com.example.cinema.po.ChargeRecord">
+        <result column="id" property="id"></result>
+        <result column="user_id" property="userId"></result>
+        <result column="charge_amount" property="chargeAmount"></result>
+        <result column="actual_amount" property="actualAmount"></result>
+        <result column="charge_time" property="chargeTime"></result>
     </resultMap>
 
     <update id="updateCardBalance" >

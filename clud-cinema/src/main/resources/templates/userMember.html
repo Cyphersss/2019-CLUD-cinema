@@ -89,9 +89,36 @@
                 <div class="line">
                     <div><b>余额：</b></div>
                     <div id="member-balance"></div>
+                    <div><u onclick="findChargeRecords()">充值记录</u></div>
                 </div>
             </div>
             <button onclick="chargeClick()">立即充值</button>
+        </div>
+    </div>
+
+    <div  id="records" class="card col-md-8 col-md-offset-2" hidden="true">
+        <div>
+            <div class="title">充值记录</div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        充值金额
+                    </th>
+                    <th>
+                        实际到账
+                    </th>
+                    <th>
+                        时间
+                    </th>
+                </tr>
+                </thead>
+                <tbody class = "ticket-list">
+
+                </tbody>
+            </table>
         </div>
     </div>
 

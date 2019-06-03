@@ -1,13 +1,18 @@
 package com.example.cinema.blImpl.promotion;
 
+
 import com.example.cinema.bl.promotion.VIPService;
 import com.example.cinema.data.promotion.VIPCardMapper;
-import com.example.cinema.vo.VIPCardForm;
+import com.example.cinema.po.ChargeRecord;
 import com.example.cinema.po.VIPCard;
 import com.example.cinema.vo.ResponseVO;
+import com.example.cinema.vo.VIPCardForm;
 import com.example.cinema.vo.VIPInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -61,6 +66,12 @@ public class VIPServiceImpl implements VIPService {
         vipCard.setBalance(vipCard.getBalance() + balance);
         try {
             vipCardMapper.updateCardBalance(vipCardForm.getVipId(), vipCard.getBalance());
+            ChargeRecord chargeRecord=new ChargeRecord();
+            chargeRecord.setUserId(vipCard.getUserId());
+            chargeRecord.setChargeAmount(vipCardForm.getAmount());
+            chargeRecord.setActualAmount(balance);
+            chargeRecord.setChargeTime(new Timestamp(System.currentTimeMillis()));
+            vipCardMapper.insertChargeRecord(chargeRecord);
             return ResponseVO.buildSuccess(vipCard);
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,6 +88,17 @@ public class VIPServiceImpl implements VIPService {
             }
             return ResponseVO.buildSuccess(vipCard);
         } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
+    @Override
+    public ResponseVO getRecordsByUserId(int userId){
+        try {
+            List<ChargeRecord> chargeRecords=vipCardMapper.selectRecordsByUserId(userId);
+            return ResponseVO.buildSuccess(chargeRecords);
+        }catch (Exception e){
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
         }
