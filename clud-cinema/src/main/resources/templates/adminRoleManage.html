@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人员管理</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/movieList.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"/>
+
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/request.js"></script>
+    <script src="/js/adminRoleManage.js"></script>
+</head>
+<body>
+<div class="main-container">
+    <div class="nav-left-container">
+        <div class="nav-user-container" style="margin-bottom: 50px;">
+            <img class="avatar-lg" src="/images/defaultAvatar.jpg" />
+            <p class="title">Admin</p>
+        </div>
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="/admin/movie/manage"><i class="icon-film"></i> 电影管理</a></li>
+            <li role="presentation"><a href="/admin/session/manage"><i class="icon-calendar"></i> 排片管理</a></li>
+            <li role="presentation"><a href="/admin/promotion/manage"><i class="icon-gift"></i> 活动管理</a></li>
+            <li role="presentation"><a href="/admin/cinema/manage"><i class="icon-cogs"></i> 影院管理</a></li>
+            <li role="presentation"><a href="/admin/cinema/statistic"><i class="icon-bar-chart"></i> 影院统计</a></li>
+            <li role="presentation" class="active"><a href="#"><i class="icon-user"></i> 人员管理</a></li>
+        </ul>
+    </div>
+    <div class="content-container">
+        <div class="content-header">
+            <span class="title gray-text">人员管理</span>
+            <button type="button" class="btn btn-primary"  data-backdrop="static" data-toggle="modal" data-target="#workerModal"><i class="icon-plus-sign"></i> 添加人员</button>
+        </div>
+        <div id="findtable" class="content-card card">
+            <div>
+                用户名：<input id="userId" style="border: black 2px" placeholder="请输入用户名">
+                职位：<select id="job" style="margin-left: 30px">
+                    <option value="空">空</option>
+                    <option value="管理者">管理者</option>
+                    <option value="售票员">售票员</option>
+                </select>
+                <button style="margin-left: 100px" onclick="find()">查找</button>
+            </div>
+        </div>
+        <div class="content-card card">
+            <div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            用户名
+                        </th>
+                        <th>
+                            职位
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class = "user-list">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="workerModal" tabindex="-1" role="dialog" aria-labelledby="workerModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="workerModalLabel">新增人员</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="worker-name-input"><span class="error-text">*</span>用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="worker-name-input" placeholder="请输入用户名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="job-input"><span class="error-text">*</span>职位</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="job-input" placeholder="管理者/售票员">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="worker-form-btn">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

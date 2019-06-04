@@ -13,7 +13,7 @@ $(document).ready(function () {
                 if (res.success) {
                     sessionStorage.setItem('username', formData.username);
                     sessionStorage.setItem('id', res.content.id);
-                    if (formData.username == "root") {
+                    if (res.content.job==2 || res.content.job==1) {
                         sessionStorage.setItem('role', 'admin');
                         window.location.href = "/admin/movie/manage"
                     } else {

@@ -2,12 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.cinema.data.user.AccountMapper">
     <insert id="createNewAccount" useGeneratedKeys="true" keyProperty="id">
-        insert into user(username,password)
-        values(#{username},#{password})
+        insert into user(username,password,job)
+        values(#{username},#{password},#{job})
     </insert>
+
     <select id="getAccountByName" resultMap="User">
         select * from user where username=#{username}
     </select>
+
+    <select id="getAllAccounts" resultMap="User">
+        select * from user
+    </select>
+
+    <delete id="deleteAccountById">
+        delete from user where id=#{id}
+    </delete>
+
+    <update id="updateAccountJob">
+        update user set job = #{job} where id = #{id}
+    </update>
 
     <resultMap id="User" type="com.example.cinema.po.User">
     </resultMap>

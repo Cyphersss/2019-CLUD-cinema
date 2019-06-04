@@ -8,6 +8,7 @@ import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
  * @author huwen
@@ -20,9 +21,9 @@ public class AccountServiceImpl implements AccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public ResponseVO registerAccount(UserForm userForm) {
+    public ResponseVO registerAccount(UserForm userForm,int job) {
         try {
-            accountMapper.createNewAccount(userForm.getUsername(), userForm.getPassword());
+            accountMapper.createNewAccount(userForm.getUsername(), userForm.getPassword(),job);
         } catch (Exception e) {
             return ResponseVO.buildFailure(ACCOUNT_EXIST);
         }
@@ -36,6 +37,22 @@ public class AccountServiceImpl implements AccountService {
             return null;
         }
         return new UserVO(user);
+    }
+
+    @Override
+    public List<User> getAllAccounts(){
+        List<User> userList=accountMapper.getAllAccounts();
+        return userList;
+    }
+
+    @Override
+    public void deleteAccountById(int id){
+        accountMapper.deleteAccountById(id);
+    }
+
+    @Override
+    public void updataAccountJob(int id,int job){
+            accountMapper.updateAccountJob(id,job);
     }
 
 

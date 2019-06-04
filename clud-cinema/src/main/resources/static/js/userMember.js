@@ -181,7 +181,6 @@ function findChargeRecords() {
                                 "<td>"+
                                 "<div>"+temp+"</div>"+
                                 "</td>"+
-
                                 "<td>"+
                                 "<div>"+recordInfo.chargeAmount+"</div>"+
                                 "</td>"+

@@ -14,6 +14,7 @@ public class UserForm {
      */
     private String password;
 
+
     public String getUsername() {
         return username;
     }
@@ -29,4 +30,5 @@ public class UserForm {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

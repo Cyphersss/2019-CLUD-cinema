@@ -4,6 +4,8 @@ import com.example.cinema.po.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @author huwen
  * @date 2019/3/23
@@ -17,7 +19,7 @@ public interface AccountMapper {
      * @param password
      * @return
      */
-    public int createNewAccount(@Param("username") String username, @Param("password") String password);
+    public int createNewAccount(@Param("username") String username, @Param("password") String password,@Param("job") int job);
 
     /**
      * 根据用户名查找账号
@@ -25,4 +27,10 @@ public interface AccountMapper {
      * @return
      */
     public User getAccountByName(@Param("username") String username);
+
+    public List<User> getAllAccounts();
+
+    public void deleteAccountById(int id);
+
+    public void updateAccountJob(int id,int job);
 }

@@ -10,11 +10,13 @@ public class UserVO {
     private Integer id;
     private String username;
     private String password;
+    private int job;
 
     public UserVO(User user){
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.job=user.getJob();
     }
 
     public Integer getId() {
@@ -39,5 +41,13 @@ public class UserVO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getJob() {
+        return job;
+    }
+
+    public void setJob(int job) {
+        this.job = job;
     }
 }

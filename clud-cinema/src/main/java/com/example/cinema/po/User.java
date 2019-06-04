@@ -8,6 +8,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    private int job;
 
     public Integer getId() {
         return id;
@@ -31,5 +32,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setJob(int job) {
+        this.job = job;
+    }
+
+    public int getJob() {
+        return job;
     }
 }

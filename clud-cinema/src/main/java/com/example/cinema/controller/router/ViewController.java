@@ -35,6 +35,9 @@ public class ViewController {
         return "adminCinemaManage";
     }
 
+    @RequestMapping(value = "/admin/role/manage")
+    public String getRoleManage(){ return "adminRoleManage";}
+
     @RequestMapping(value = "/admin/promotion/manage")
     public String getAdminPromotionManage() {
         return "adminPromotionManage";
