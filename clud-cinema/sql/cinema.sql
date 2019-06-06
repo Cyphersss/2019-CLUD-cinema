@@ -130,8 +130,8 @@ DROP TABLE IF EXISTS `hall`;
 CREATE TABLE `hall` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
-  `column` int(11) DEFAULT NULL,
-  `row` int(11) DEFAULT NULL,
+  `hall_column` int(11) DEFAULT NULL,
+  `hall_row` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;

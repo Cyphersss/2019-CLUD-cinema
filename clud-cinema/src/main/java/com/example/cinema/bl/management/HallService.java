@@ -1,5 +1,6 @@
 package com.example.cinema.bl.management;
 
+import com.example.cinema.po.Hall;
 import com.example.cinema.vo.ResponseVO;
 
 /**
@@ -12,4 +13,11 @@ public interface HallService {
      * @return
      */
     ResponseVO searchAllHall();
+
+    ResponseVO insertHall(Hall hall);
+
+    ResponseVO updateHall(String name,int column,int row,String oldName);
+
+    ResponseVO deleteHall(String oldName);
 }
+

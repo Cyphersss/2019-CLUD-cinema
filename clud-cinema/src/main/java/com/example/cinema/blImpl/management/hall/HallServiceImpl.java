@@ -40,6 +40,60 @@ public class HallServiceImpl implements HallService, HallServiceForBl {
         }
 
     }
+/*
+    @Override
+    public Hall getHallByName(String name){
+        try{
+            return hallMapper.selectHallByName(name);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+
+    @Override
+    public ResponseVO insertHall(Hall hall){
+        try{
+            boolean hasError=false;
+            List<HallVO> li=hallList2HallVOList(hallMapper.selectAllHall());
+            for (HallVO item:li){
+                if (item.getName().equals(hall.getName())){
+                    hasError=true;
+                }
+            }
+            if (hasError){
+                return ResponseVO.buildFailure("影厅名已存在");
+            }
+            hallMapper.insertHall(hall.getName(),hall.getColumn(),hall.getRow());
+            return ResponseVO.buildSuccess();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
+    @Override
+    public ResponseVO updateHall(String name,int column,int row,String oldName){
+        try{
+            hallMapper.updateHall(name,column,row,oldName);
+            return ResponseVO.buildSuccess();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
+    @Override
+    public ResponseVO deleteHall(String oldName){
+        try{
+            hallMapper.deleteHall(oldName);
+            return ResponseVO.buildSuccess();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
 
     private List<HallVO> hallList2HallVOList(List<Hall> hallList){
         List<HallVO> hallVOList = new ArrayList<>();
