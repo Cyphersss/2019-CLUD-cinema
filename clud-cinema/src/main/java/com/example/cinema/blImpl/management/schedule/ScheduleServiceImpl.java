@@ -3,6 +3,7 @@ import java.util.Date;
 
 import com.example.cinema.bl.management.ScheduleService;
 import com.example.cinema.blImpl.management.hall.HallServiceForBl;
+import com.example.cinema.data.management.HallMapper;
 import com.example.cinema.data.management.ScheduleMapper;
 import com.example.cinema.po.Movie;
 import com.example.cinema.po.ScheduleItem;
@@ -38,12 +39,17 @@ public class ScheduleServiceImpl implements ScheduleService, ScheduleServiceForB
     private MovieServiceForBl movieServiceForBl;
     @Autowired
     private HallServiceForBl hallServiceForBl;
+    @Autowired
+    private HallMapper hallMapper;
 
 
     @Override
     public ResponseVO selectAll(){
         try {
             List<ScheduleItem> li=scheduleMapper.selectAll();
+            for (ScheduleItem item:li){
+                item.setHallName(hallMapper.selectHallById(item.getHallId()).getName());
+            }
             return  ResponseVO.buildSuccess(li);
         }catch (Exception e){
             e.printStackTrace();

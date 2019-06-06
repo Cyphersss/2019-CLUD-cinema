@@ -89,6 +89,42 @@ function confirmCommit() {
                     {vipId: vipCardId, amount: parseInt($('#userMember-amount').val())},
                     function (res) {
                         $('#buyModal').modal('hide');
+                        getRequest(
+                            '/vip/'+sessionStorage.getItem('id')+'/getRecords',
+                            function (res) {
+                                if (res.success) {
+                                    $('.ticket-list').empty();
+                                    var recordsList=res.content;
+                                    var body='';
+                                    var temp=1;
+                                    recordsList.forEach(
+                                        function (recordInfo) {
+                                            body +=
+                                                "<tr>"+
+                                                "<td>"+
+                                                "<div>"+temp+"</div>"+
+                                                "</td>"+
+                                                "<td>"+
+                                                "<div>"+recordInfo.chargeAmount+"</div>"+
+                                                "</td>"+
+                                                "<td>"+
+                                                "<div>"+recordInfo.actualAmount+"</div>"+
+                                                "</td>"+
+                                                "<td>"+
+                                                "<div>"+JSON.stringify(recordInfo.chargeTime).substring(1,11)+" "+JSON.stringify(recordInfo.chargeTime).substring(12,20)+"</div>"+
+                                                "</td>"+
+                                                "</tr>";
+                                            temp=temp+1;
+                                        }
+                                    );
+                                    $('.ticket-list').append(body);
+                                }
+                            },
+                            function (error) {
+                                alert(error);
+                            }
+                        )
+
                         alert("充值成功");
                         getVIP();
                     },
@@ -161,8 +197,7 @@ function formatDate(date) {
 }
 
 function findChargeRecords() {
-    var ishid=document.getElementById("records");
-    var table=document.getElementById("tablenody");
+    var ishid=document.getElementById("records");;
     if (isHidden){
         ishid.style.display="inline";
         isHidden=false;

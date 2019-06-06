@@ -6,69 +6,6 @@ $(document).ready(function() {
     getCanSeeDayNum();
     getCinemaHalls();
 
-    function getCinemaHalls() {
-        var halls = [];
-        getRequest(
-            '/hall/all',
-            function (res) {
-                halls = res.content;
-                renderHall(halls);
-                $('.edit-btn').click(function () {
-                    var name = $($(this).siblings()[0]).text();
-                    var rc = $($(this).siblings()[1]).text();
-                    var column = rc.split("*")[0];
-                    var row = rc.split("*")[1];
-                    hallName=name;
-                    $("#hall-name-edit-input").val(name);
-                    $("#hall-row-edit-input").val(row);
-                    $("#hall-column-edit-input").val(column);
-                    //$("#hall-size-edit-input").val("大");
-                });
-            },
-            function (error) {
-                alert(JSON.stringify(error));
-            }
-        );
-    }
-
-    function renderHall(halls){
-        $('#hall-card').empty();
-        var hallDomStr = "";
-        halls.forEach(function (hall) {
-            var seat = "";
-            for(var i =0;i<hall.row;i++){
-                var temp = ""
-                for(var j =0;j<hall.column;j++){
-                    temp+="<div class='cinema-hall-seat'></div>";
-                }
-                seat+= "<div>"+temp+"</div>";
-            }
-            var hallId=hall.id;
-            var area=hall.column*hall.row;
-            var size;
-            if(area<=50){
-                size="小";
-            }else if(area<=100){
-                size="中";
-            }else{
-                size="大";
-            }
-
-            var hallDom =
-                "<div class='cinema-hall'>" +
-                "<div>" +
-                "<span class='cinema-hall-name'>"+ hall.name+"</span>" +
-                "<span class='cinema-hall-size'>"+ hall.column +'*'+ hall.row +"</span>" +
-                "<span class='cinema-hall-specs'>"+ '  ' + size + '  ' + "</span>" +
-                "<a class=\"edit-btn\" data-backdrop='static' data-toggle=\"modal\"  data-target=\"#hallEditModal\">修改影厅</a>"+
-                "</div>" +
-                "<div class='cinema-seat'>" + seat +
-                "</div>" +
-                "</div>";
-            hallDomStr+=hallDom;
-        });
-        $('#hall-card').append(hallDomStr);
-    }
 
     function getCanSeeDayNum() {
         getRequest(
@@ -158,36 +95,83 @@ $(document).ready(function() {
             return;
         }
         getRequest(
-            '/hall/update?name=' + form.name + '&row=' + form.row + '&column=' + form.column +'&oldName=' +hallName,
+            '/schedule/all',
             function (res) {
-                if(res.success){
-                    getCinemaHalls();
-                    $("#hallEditModal").modal("hide");
-                }else{
-                    alert(res.message);
+                var li=res.content;
+                var hasSchedule=false;
+                li.forEach(function (schedule) {
+                        if (schedule.hallName===hallName){
+                            var endTime=new Date(schedule.endTime).getTime();
+                            var now=new Date().getTime();
+                            if (now-endTime<=0){
+                                hasSchedule=true;
+                            }
+                            return false;
+                        }
+                    }
+                )
+                if (hasSchedule){
+                    alert(" 该影厅已有安排")
+                } else {
+                    alert("??")
+                    getRequest(
+                        '/hall/update?name=' + form.name + '&row=' + form.row + '&column=' + form.column +'&oldName=' +hallName,
+                        function (res) {
+                            if(res.success){
+                                getCinemaHalls();
+                                $("#hallEditModal").modal("hide");
+                            }else{
+                                alert(res.message);
+                            }
+                        },
+                        function (error) {
+                            alert(JSON.stringify(error));
+                        }
+                    )
                 }
-            },
-            function (error) {
-                alert(JSON.stringify(error));
             }
         )
+
     })
 })
 function deleteHall() {
+    var hasSchedule=false;
     getRequest(
-        '/hall/delete?oldName=' + hallName,
+        '/schedule/all',
         function (res) {
-            if(res.success){
-                getCinemaHalls2();
-                $("#hallEditModal").modal("hide");
-            }else{
-                alert(res.message);
+            var li=res.content;
+            li.forEach(function (schedule) {
+                if (schedule.hallName===hallName){
+                    var endTime=new Date(schedule.endTime).getTime();
+                    var now=new Date().getTime();
+                    if (now-endTime<=0){
+                        hasSchedule=true;
+                    }
+                    return false;
+                }
             }
-        },
-        function (error) {
-            alert(JSON.stringify(error));
+            )
+            if (hasSchedule){
+                alert(" 该影厅已有安排")
+            } else {
+                getRequest(
+                    '/hall/delete?oldName=' + hallName,
+                    function (res) {
+                        if(res.success){
+                            getCinemaHalls2();
+                            $("#hallEditModal").modal("hide");
+                        }else{
+                            alert(res.message);
+                        }
+                    },
+                    function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                )
+            }
         }
     )
+
 }
 function getCinemaHalls2() {
     var halls = [];
@@ -214,6 +198,69 @@ function getCinemaHalls2() {
     );
 }
 
+function getCinemaHalls() {
+    var halls = [];
+    getRequest(
+        '/hall/all',
+        function (res) {
+            halls = res.content;
+            renderHall(halls);
+            $('.edit-btn').click(function () {
+                var name = $($(this).siblings()[0]).text();
+                var rc = $($(this).siblings()[1]).text();
+                var column = rc.split("*")[0];
+                var row = rc.split("*")[1];
+                hallName=name;
+                $("#hall-name-edit-input").val(name);
+                $("#hall-row-edit-input").val(row);
+                $("#hall-column-edit-input").val(column);
+                //$("#hall-size-edit-input").val("大");
+            });
+        },
+        function (error) {
+            alert(JSON.stringify(error));
+        }
+    );
+}
+
+function renderHall(halls){
+    $('#hall-card').empty();
+    var hallDomStr = "";
+    halls.forEach(function (hall) {
+        var seat = "";
+        for(var i =0;i<hall.row;i++){
+            var temp = ""
+            for(var j =0;j<hall.column;j++){
+                temp+="<div class='cinema-hall-seat'></div>";
+            }
+            seat+= "<div>"+temp+"</div>";
+        }
+        var area=hall.column*hall.row;
+        var size;
+        if(area<=50){
+            size="小";
+        }else if(area<=100){
+            size="中";
+        }else{
+            size="大";
+        }
+
+        var hallDom =
+            "<div class='cinema-hall'>" +
+            "<div>" +
+            "<span class='cinema-hall-name'>"+ hall.name+"</span>" +
+            "<span class='cinema-hall-size'>"+ hall.column +'*'+ hall.row +"</span>" +
+            "<span class='cinema-hall-specs'>"+ '  ' + size + '  ' + "</span>" +
+            "<a class=\"edit-btn\" data-backdrop='static' data-toggle=\"modal\"  data-target=\"#hallEditModal\">修改影厅</a>"+
+            "</div>" +
+            "<div class='cinema-seat'>" + seat +
+            "</div>" +
+            "</div>";
+        hallDomStr+=hallDom;
+    });
+    $('#hall-card').append(hallDomStr);
+}
+
 function renderHall2(halls){
     $('#hall-card').empty();
     var hallDomStr = "";
@@ -226,7 +273,6 @@ function renderHall2(halls){
             }
             seat+= "<div>"+temp+"</div>";
         }
-        var hallId=hall.id;
         var area=hall.column*hall.row;
         var size;
         if(area<=50){
