@@ -31,7 +31,7 @@
         (SELECT * FROM (SELECT schedule_id,movie_id,seat_number,COUNT(ticket_id) AS ticket_num FROM
         (SELECT * FROM
         (SELECT id AS schedule_id,movie_id,hall_id AS schedule_hall_id FROM SCHEDULE WHERE start_time BETWEEN #{date} and #{nextDate}) s,
-		(SELECT hall.row*hall.column AS seat_number,id FROM hall) h
+		(SELECT hall.hall_row*hall.hall_column AS seat_number,id FROM hall) h
 		WHERE s.schedule_hall_id = h.id) m
 	    LEFT JOIN
 	    (SELECT schedule_id AS scheduleId,t.id AS ticket_id

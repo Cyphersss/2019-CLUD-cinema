@@ -19,6 +19,11 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @RequestMapping(value="/schedule/all",method = RequestMethod.GET)
+    public  ResponseVO selectAll(){
+        return scheduleService.selectAll();
+    }
+
     @RequestMapping(value = "/schedule/add", method = RequestMethod.POST)
     public ResponseVO addSchedule(@RequestBody ScheduleForm scheduleForm){
         return scheduleService.addSchedule(scheduleForm);

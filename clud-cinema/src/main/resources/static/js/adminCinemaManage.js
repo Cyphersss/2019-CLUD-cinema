@@ -32,42 +32,74 @@ $(document).ready(function() {
     }
 
     function renderHall(halls){
-        $('#hall-card').empty();
-        var hallDomStr = "";
-        halls.forEach(function (hall) {
-            var seat = "";
-            for(var i =0;i<hall.row;i++){
-                var temp = ""
-                for(var j =0;j<hall.column;j++){
-                    temp+="<div class='cinema-hall-seat'></div>";
-                }
-                seat+= "<div>"+temp+"</div>";
+        getRequest(
+            '/schedule/all',
+            function (res) {
+                var schedules=res.content;
+                var hasSchedule;
+                $('#hall-card').empty();
+                var hallDomStr = "";
+                halls.forEach(function (hall) {
+                    var hallId=hall.id;
+                    hasSchedule=false
+                    schedules.forEach(function (schedule) {
+                        if (schedule.hallId===hallId){
+                            var endTime=new Date(schedule.endTime);
+                            var now=new Date();
+                            if (now-endTime<=0){
+                                hasSchedule=true;
+                            }
+                        }
+                    })
+                    var seat = "";
+                    for(var i =0;i<hall.row;i++){
+                        var temp = ""
+                        for(var j =0;j<hall.column;j++){
+                            temp+="<div class='cinema-hall-seat'></div>";
+                        }
+                        seat+= "<div>"+temp+"</div>";
+                    }
+                    var area=hall.column*hall.row;
+                    var size;
+                    if(area<=50){
+                        size="小";
+                    }else if(area<=100){
+                        size="中";
+                    }else{
+                        size="大";
+                    }
+                    if (hasSchedule){
+                        var hallDom =
+                            "<div class='cinema-hall'>" +
+                            "<div>" +
+                            "<span class='cinema-hall-name'>"+ hall.name+"</span>" +
+                            "<span class='cinema-hall-size'>"+ hall.column +'*'+ hall.row +"</span>" +
+                            "<span class='cinema-hall-specs'>"+ '  ' + size + '  ' + "</span>" +
+                            "</div>" +
+                            "<div class='cinema-seat'>" + seat +
+                            "</div>" +
+                            "</div>";
+                    } else {
+                        var hallDom =
+                            "<div class='cinema-hall'>" +
+                            "<div>" +
+                            "<span class='cinema-hall-name'>"+ hall.name+"</span>" +
+                            "<span class='cinema-hall-size'>"+ hall.column +'*'+ hall.row +"</span>" +
+                            "<span class='cinema-hall-specs'>"+ '  ' + size + '  ' + "</span>" +
+                            "<a class=\"edit-btn\" data-backdrop='static' data-toggle=\"modal\"  data-target=\"#hallEditModal\">修改影厅</a>"+
+                            "</div>" +
+                            "<div class='cinema-seat'>" + seat +
+                            "</div>" +
+                            "</div>";
+                    }
+                    hallDomStr+=hallDom;
+                });
+                $('#hall-card').append(hallDomStr);
+            },
+            function (error) {
+                alert(error)
             }
-            var hallId=hall.id;
-            var area=hall.column*hall.row;
-            var size;
-            if(area<=50){
-                size="小";
-            }else if(area<=100){
-                size="中";
-            }else{
-                size="大";
-            }
-
-            var hallDom =
-                "<div class='cinema-hall'>" +
-                "<div>" +
-                "<span class='cinema-hall-name'>"+ hall.name+"</span>" +
-                "<span class='cinema-hall-size'>"+ hall.column +'*'+ hall.row +"</span>" +
-                "<span class='cinema-hall-specs'>"+ '  ' + size + '  ' + "</span>" +
-                "<a class=\"edit-btn\" data-backdrop='static' data-toggle=\"modal\"  data-target=\"#hallEditModal\">修改影厅</a>"+
-                "</div>" +
-                "<div class='cinema-seat'>" + seat +
-                "</div>" +
-                "</div>";
-            hallDomStr+=hallDom;
-        });
-        $('#hall-card').append(hallDomStr);
+        )
     }
 
     function getCanSeeDayNum() {

@@ -41,6 +41,17 @@ public class ScheduleServiceImpl implements ScheduleService, ScheduleServiceForB
 
 
     @Override
+    public ResponseVO selectAll(){
+        try {
+            List<ScheduleItem> li=scheduleMapper.selectAll();
+            return  ResponseVO.buildSuccess(li);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
+    @Override
     public ResponseVO addSchedule(ScheduleForm scheduleForm) {
         try {
             ResponseVO responseVO = preCheck(scheduleForm);

@@ -66,4 +66,11 @@ public interface ScheduleService {
      */
     ResponseVO searchAudienceSchedule(int movieId);
 
+    /**
+     * 查询所有schedule
+     * zcy
+     * @return
+     */
+    ResponseVO selectAll();
+
 }
